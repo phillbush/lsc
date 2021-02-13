@@ -1,0 +1,128 @@
+LSC(1)                      General Commands Manual                     LSC(1)
+
+
+
+NAME
+       lsc - list clients
+
+SYNOPSIS
+       lsc [-als]
+
+DESCRIPTION
+       lsc list clients managed by an EWMH-compliant window manager.  Output
+       is one entry per line.
+
+       The options are as follows:
+
+       -a     List the active window whenever it changes.  This option makes
+              lsc run indefinitely, watching for changes in the
+              _NET_ACTIVE_WINDOW property.
+
+       -l     List in long format (see below).
+
+       -s     Sort by stacking order.  That is, use _NET_CLIENT_LIST_STACKING
+              instead of _NET_CLIENT_LIST to get the list of clients.
+
+   The Long Format
+       If the -l option is given, the following information is displayed for
+       each client: client type and state, client window group ID, client
+       transient for window ID, its window ID, and its window name.
+
+       The first space-separated field consists of a sequence of ten
+       characters, each one meaning a type state of the client.  If a
+       character is - the client is normal or the state does not apply to the
+       client.
+
+       • The first character indicates the type of the window.  It can be -
+         (the window is normal), k (the window is a dock), b (the window is a
+         bar/dock/panel), t (the window is a toolbar), m (the window is a
+         menu), u (the window is a small persistent utility window, such as a
+         palette or toolbox), s (the window is a splash screen), or d (the
+         window is a dialog window).
+
+       • The second character is t to indicate that the window is a transient
+         window (WM_TRANSIENT_FOR); m to indicate that the window is a modal
+         window (_NET_WM_STATE_MODAL); or T to indicate that the window is
+         both transient and modal.
+
+       • The third character is y to indicate that the client is sticky
+         (_NET_WM_STATE_STICKY).
+
+       • The fourth character is v to indicate that the client is maximized
+         vertically (_NET_WM_STATE_MAXIMIZED_VERT); h to indicate that the
+         client is maximized horizontally (_NET_WM_STATE_MAXIMIZED_HORZ); or M
+         to indicate that the client is maximized to both directions.
+
+       • The fifth character is s to indicate that the client is shaded
+         (_NET_WM_STATE_SHADED).
+
+       • The sixth character is t to indicate that the taskbar should skip the
+         client (_NET_WM_STATE_SKIP_TASKBAR); p to indicate that the pager
+         should skip the client (_NET_WM_STATE_SKIP_PAGER); or S to indicate
+         that both the taskbar and pager should skip the client.
+
+       • The seventh character is h to indicate that the client is
+         hidden/minimized (_NET_WM_STATE_HIDDEN).
+
+       • The eighth character is f to indicate that the client is fullscreen
+         (_NET_WM_STATE_FULLSCREEN).
+
+       • The ninth character is a to indicate that the client is above others
+         (_NET_WM_STATE_ABOVE); or b to indicate that the client is below
+         others (_NET_WM_STATE_BELOW);
+
+       • The tenth character is u to indicate that the client has the urgency
+         hint set; a to indicate that the client demands attention
+         (_NET_WM_STATE_DEMANDS_ATTENTION); or U to indicate that the client
+         is both urgent and demands attention.
+
+       • The eleventh character is a to indicate that the client is active
+         (_NET_ACTIVE_WINDOW); f to indicate that the client is focused
+         (_NET_WM_STATE_FOCUSED); or A to indicate that the client is both
+         active and focused.
+
+       The second space-separated field is the ID of the window group that the
+       client belongs to.  If the client belongs to no group, this ID is
+       0x00000000.
+
+       The third space-separated field is the ID of the window which the
+       client is a transient for.  If the client is not a transient window,
+       this ID is 0x00000000.
+
+       The fourth space-separated field is the ID of the client window itself.
+
+       The remaining space-separated fields are the name of the client.
+
+ENVIRONMENT
+       The followingj environment variables affect the execution of lsc
+
+       DISPLAY
+              The display where the window manager is running on.
+
+EXAMPLES
+       The following is an example of the output of lsc run with the -l flag.
+
+              ---M------A- 0x00000000 0x00000000 0x01400016 lsc.1 + (~/proj/lsc) - VIM
+              ------h----- 0x01800001 0x00000000 0x01800003 [No Name] - VIM
+              ---M-------- 0x00000000 0x00000000 0x03e00016 ttyp1: ~/proj/lsc
+              ------------ 0x01a00001 0x00000000 0x01a00003 Wikipedia, the free encyclopedia - Mozilla Firefox
+
+       This output indicates that we have a normal Firefox client, two fully
+       maximized clients (one of them, is both active and focused), and a
+       hidden/minimized client.
+
+       In this example, two clients belong to a group. But no client is
+       transient for another window.
+
+SEE ALSO
+       lsd(1), lsw(1)
+
+BUGS
+       I need to add more information to the long format, such as the monitor
+       the client is in, the desktop the client belongs to, the client
+       geometry, etc.  Thus, the long format may change in future releases to
+       include more fields.
+
+
+
+                                                                        LSC(1)
