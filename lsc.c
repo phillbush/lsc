@@ -14,6 +14,7 @@ static int screen;
 static Atom utf8string;
 static Atom netwmname;
 static Atom netwmvisiblename;
+static Atom netwmdesktop;
 static Atom netactivewindow;
 static Atom netclientlist;
 static Atom netclientliststacking;
@@ -51,6 +52,25 @@ usage(void)
 {
 	(void)fprintf(stderr, "usage: lsc [-als]\n");
 	exit(1);
+}
+
+/* get cardinal property from given window */
+static unsigned long
+getcardprop(Window win, Atom prop)
+{
+	unsigned long ret;
+	unsigned char *u;
+	unsigned long dl;   /* dummy variable */
+	int di;             /* dummy variable */
+	Atom da;            /* dummy variable */
+
+	if (XGetWindowProperty(dpy, win, prop, 0L, 1L, False, XA_CARDINAL,
+		               &da, &di, &dl, &dl, &u) != Success) {
+		return 0;
+	}
+	ret = *(unsigned long *)u;
+	XFree(u);
+	return ret;
 }
 
 /* get atom property from given window */
@@ -146,7 +166,8 @@ static void
 longlist(Window win)
 {
 	Atom *atoms;
-	unsigned long i, natoms;
+	int desk;
+	unsigned long i, natoms, n;
 	char type = '-';
 	char state[10] = "----------";
 	char name[BUFSIZ] = "\0";
@@ -258,11 +279,14 @@ longlist(Window win)
 		XFree(atoms);
 	}
 
+	n = getcardprop(win, netwmdesktop);
+	desk = (n ==  0xFFFFFFFF) ? -1 : n;
+
 	if (!gettextprop(win, netwmvisiblename, name, sizeof name))
 		if (!gettextprop(win, netwmname, name, sizeof name))
 			gettextprop(win, XA_WM_NAME, name, sizeof name);
 
-	printf("%c%s 0x%08lx 0x%08lx 0x%08lx %s\n", type, state, group, transfor, win, name);
+	printf("%c%s %3d 0x%08lx 0x%08lx 0x%08lx %s\n", type, state, desk, group, transfor, win, name);
 }
 
 /* lsc: list clients */
@@ -304,6 +328,7 @@ main(int argc, char *argv[])
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
 	netwmname = XInternAtom(dpy, "_NET_WM_NAME", False);
 	netwmvisiblename = XInternAtom(dpy, "_NET_WM_VISIBLE_NAME", False);
+	netwmdesktop = XInternAtom(dpy, "_NET_WM_DESKTOP", False);
 	netactivewindow = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 	netclientlist = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
 	netclientliststacking = XInternAtom(dpy, "_NET_CLIENT_LIST_STACKING", False);

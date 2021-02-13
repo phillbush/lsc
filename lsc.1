@@ -122,13 +122,15 @@ to indicate that the client is focused (_NET_WM_STATE_FOCUSED); or
 .B A
 to indicate that the client is both active and focused.
 .PP
-The second space-separated field is the ID of the window group that the client belongs to.
+The second space-separated field is the number of the desktop the window is in.
+.PP
+The third space-separated field is the ID of the window group that the client belongs to.
 If the client belongs to no group, this ID is 0x00000000.
 .PP
-The third space-separated field is the ID of the window which the client is a transient for.
+The fourth space-separated field is the ID of the window which the client is a transient for.
 If the client is not a transient window, this ID is 0x00000000.
 .PP
-The fourth space-separated field is the ID of the client window itself.
+The fifth space-separated field is the ID of the client window itself.
 .PP
 The remaining space-separated fields are the name of the client.
 .SH ENVIRONMENT
@@ -143,23 +145,18 @@ The following is an example of the output of lsc run with the
 flag.
 .IP
 .EX
----M------A- 0x00000000 0x00000000 0x01400016 lsc.1 + (~/proj/lsc) - VIM
-------h----- 0x01800001 0x00000000 0x01800003 [No Name] - VIM
----M-------- 0x00000000 0x00000000 0x03e00016 ttyp1: ~/proj/lsc
------------- 0x01a00001 0x00000000 0x01a00003 Wikipedia, the free encyclopedia - Mozilla Firefox
+---M------A-   0 0x00000000 0x00000000 0x01400016 lsc.1 + (~/proj/lsc) - VIM
+------h-----   2 0x01800001 0x00000000 0x01800003 [No Name] - VIM
+---M--------   0 0x00000000 0x00000000 0x03e00016 ttyp1: ~/proj/lsc
+------------   1 0x01a00001 0x00000000 0x01a00003 Mozilla Firefox
 .EE
 .PP
-This output indicates that we have a normal Firefox client,
-two fully maximized clients (one of them is both active and focused),
-and a hidden/minimized client.
+This output indicates that we have a normal Firefox client on the second desktop
+(the desktop 1),
+two fully maximized clients on the first desktop (one of them is both active and focused),
+and a hidden/minimized client on the third desktop.
 .PP
 In this example, two clients belong to a group. But no client is transient for another window.
 .SH SEE ALSO
 .IR lsd (1),
 .IR lsw (1)
-.SH BUGS
-I need to add more information to the long format,
-such as the monitor the client is in,
-the desktop the client belongs to,
-the client geometry, etc.
-Thus, the long format may change in future releases to include more fields.
