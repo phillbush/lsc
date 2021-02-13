@@ -169,7 +169,7 @@ longlist(Window win)
 	int desk;
 	unsigned long i, natoms, n;
 	char type = '-';
-	char state[10] = "----------";
+	char state[11] = "----------";
 	char name[BUFSIZ] = "\0";
 	XWMHints *wmhints = NULL;
 	Window *list = NULL;
