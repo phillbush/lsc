@@ -108,7 +108,7 @@ EXAMPLES
               ------------ 0x01a00001 0x00000000 0x01a00003 Wikipedia, the free encyclopedia - Mozilla Firefox
 
        This output indicates that we have a normal Firefox client, two fully
-       maximized clients (one of them, is both active and focused), and a
+       maximized clients (one of them is both active and focused), and a
        hidden/minimized client.
 
        In this example, two clients belong to a group. But no client is
